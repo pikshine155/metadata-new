@@ -1,0 +1,13 @@
+[build]
+  base = "."
+  command = "chmod +x ./build.sh && bash ./build.sh"
+  publish = "metadata-main/dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_FLAGS = "--no-audit --no-fund --legacy-peer-deps"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200 

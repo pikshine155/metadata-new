@@ -1,0 +1,26 @@
+{
+  "name": "svg-processor-with-gemini",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cd metadata-main && npm install && npm run dev",
+    "build": "cd metadata-main && npm install --legacy-peer-deps --force && npx vite build",
+    "preview": "cd metadata-main && npm install && npm run preview"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "axios": "^1.8.4"
+  },
+  "devDependencies": {
+    "vite": "^4.5.1",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "overrides": {
+    "eslint": "^8.56.0"
+  }
+}
