@@ -1,9 +1,8 @@
-
 import React, { useState, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Upload, X, FileIcon, Image, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
-import { ProcessedImage, createImagePreview, generateId, isValidImageType, isValidFileSize, formatFileSize } from '@/utils/imageHelpers';
+import { ProcessedImage, createImagePreview, generateId, isValidMediaType, isValidFileSize, formatFileSize } from '@/utils/imageHelpers';
 
 interface ImageUploaderProps {
   onImagesSelected: (images: ProcessedImage[]) => void;
@@ -33,9 +32,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
     for (const file of filesToProcess) {
       const promise = (async () => {
-        // Validate file is an image
-        if (!isValidImageType(file)) {
-          toast.error(`${file.name} is not a valid image file. Only JPEG, PNG, SVG, AI, and EPS files are supported.`);
+        // Validate file is an image or video
+        if (!isValidMediaType(file)) {
+          toast.error(`${file.name} is not a valid image or video file. Only JPEG, PNG, SVG, AI, EPS images and MP4, MOV, AVI videos are supported.`);
           return null;
         }
 
@@ -115,9 +114,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         </div>
         
         <div className="text-center mb-6">
-          <p className="text-lg font-medium text-white mb-2">Drag and drop unlimited images here</p>
+          <p className="text-lg font-medium text-white mb-2">Drag and drop unlimited images or videos here</p>
           <p className="text-sm text-gray-400">
-            or click to upload (JPEG, PNG, SVG, AI, EPS up to 10GB each)
+            or click to upload (JPEG, PNG, SVG, AI, EPS, MP4, MOV, AVI up to 10GB each)
           </p>
         </div>
         
@@ -134,7 +133,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           type="file" 
           ref={fileInputRef} 
           onChange={handleFileInputChange} 
-          accept="image/jpeg,image/png,image/jpg,image/svg+xml,application/postscript,application/eps,image/eps,application/illustrator" 
+          accept="image/jpeg,image/png,image/jpg,image/svg+xml,application/postscript,application/eps,image/eps,application/illustrator,video/mp4,video/quicktime,video/x-msvideo" 
           multiple 
           className="hidden" 
           disabled={isProcessing} 

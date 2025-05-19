@@ -34,6 +34,9 @@ export function formatImagesAsCSV(images: ProcessedImage[], isFreepikOnly: boole
   // Determine headers based on platform selection
   let headers;
   
+  // Video-specific CSV header
+  const videoHeaders = ['"Filename"', '"Title"', '"Keywords"', '"Category"'];
+  
   if (isFreepikOnly) {
     headers = ['"File name"', '"Title"', '"Keywords"', '"Prompt"', '"Base-Model"'];
   } else if (isShutterstock) {
@@ -44,17 +47,30 @@ export function formatImagesAsCSV(images: ProcessedImage[], isFreepikOnly: boole
     headers = ['"Filename"', '"Title"', '"Description"', '"Keywords"'];
   }
     
-  // Add headers
   const csvContent = [
-    // Use semicolons for Freepik, commas for other platforms
     headers.join(isFreepikOnly ? ';' : ','),
-    // Add data rows
     ...images
       .filter(img => img.status === 'complete' && img.result)
       .map(img => {
-        // Ensure title has no symbols before writing to CSV
+        // Detect if this is a video file
+        const isVideo = img.file.type.startsWith('video/');
         const cleanTitle = img.result?.title ? removeSymbolsFromTitle(img.result.title) : '';
-        
+        if (isVideo) {
+          // Find the matched Adobe Stock category index (1-based)
+          let categoryIndex = '';
+          if (img.result?.categories && img.result.categories.length > 0) {
+            const cat = img.result.categories[0];
+            const idx = adobeStockCategories.findIndex(c => c === cat);
+            if (idx !== -1) categoryIndex = (idx + 1).toString();
+          }
+          return [
+            `"${img.file.name}"`,
+            `"${cleanTitle}"`,
+            `"${img.result?.keywords?.join(',') || ''}"`,
+            `"${categoryIndex}"`
+          ].join(',');
+        }
+        // ... existing code for images ...
         if (isFreepikOnly) {
           return [
             `"${img.file.name}"`,
@@ -103,9 +119,9 @@ export function downloadCSV(csvContent: string, filename = 'image-metadata.csv',
   let folderName = 'metadata';
   
   if (platform === 'AdobeStock') {
-    folderName = 'AdobeStock-MetaData By FreepikScipts ✨';
+    folderName = 'AdobeStock-MetaData By Pikshine ✨';
   } else if (platform === 'Freepik') {
-    folderName = 'Freepik-MetaData By Freepikscipts';
+    folderName = 'Freepik-MetaData By Pikshine';
   } else if (platform) {
     folderName = `${platform}-MetaData`;
   }
@@ -136,9 +152,10 @@ export function formatFileSize(bytes: number): string {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-// Check if file is a valid image type
-export function isValidImageType(file: File): boolean {
+// Check if file is a valid image or video type
+export function isValidMediaType(file: File): boolean {
   const acceptedTypes = [
+    // Images
     'image/jpeg', 
     'image/png', 
     'image/jpg', 
@@ -148,7 +165,14 @@ export function isValidImageType(file: File): boolean {
     'application/eps', // EPS files
     'application/x-eps',
     'image/eps',
-    'application/illustrator' // Adobe Illustrator
+    'application/illustrator', // Adobe Illustrator
+    // Videos
+    'video/mp4',
+    'video/quicktime', // MOV
+    'video/x-msvideo', // AVI
+    'video/mpeg',
+    'video/webm',
+    'video/x-matroska', // MKV
   ];
   return acceptedTypes.includes(file.type);
 }
