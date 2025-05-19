@@ -230,29 +230,64 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                     </div>
                     
                     <div className="space-y-4">
+                      {/* Filename with copy button */}
                       <div>
-                        <h4 className="text-amber-500">Filename:</h4>
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-amber-500">Filename:</h4>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 p-0"
+                            onClick={() => handleCopyToClipboard(image.file.name, `${image.id}-filename`)}
+                            aria-label="Copy Filename"
+                          >
+                            {copiedId === `${image.id}-filename` ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}
+                          </Button>
+                        </div>
                         <p className="text-white">{image.file.name}</p>
                       </div>
-                      
-                      {/* Show title for all platforms except Shutterstock */}
+
+                      {/* Title with copy button (not for Shutterstock) */}
                       {!isShutterstock && (
                         <div>
-                          <h4 className="text-amber-500">Title:</h4>
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-amber-500">Title:</h4>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-6 w-6 p-0"
+                              onClick={() => handleCopyToClipboard(cleanTitle, `${image.id}-title`)}
+                              aria-label="Copy Title"
+                            >
+                              {copiedId === `${image.id}-title` ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}
+                            </Button>
+                          </div>
                           <p className="text-white">{cleanTitle}</p>
                         </div>
                       )}
-                      
-                      {/* Show description for platforms other than Freepik and AdobeStock */}
+
+                      {/* Description (no copy button, as requested) */}
                       {!isFreepikOnly && !isAdobeStock && (
                         <div>
                           <h4 className="text-amber-500">Description:</h4>
                           <p className="text-white">{image.result?.description || ''}</p>
                         </div>
                       )}
-                      
+
+                      {/* Keywords with copy button */}
                       <div>
-                        <h4 className="text-amber-500">Keywords:</h4>
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-amber-500">Keywords:</h4>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 p-0"
+                            onClick={() => handleCopyToClipboard((image.result?.keywords || []).join(', '), `${image.id}-keywords`)}
+                            aria-label="Copy Keywords"
+                          >
+                            {copiedId === `${image.id}-keywords` ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}
+                          </Button>
+                        </div>
                         <div className="flex flex-wrap gap-2 mt-2">
                           {image.result?.keywords && image.result.keywords.length > 0 ? (
                             image.result.keywords.map((keyword, index) => (
@@ -269,10 +304,21 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                         </div>
                       </div>
 
-                      {/* Show categories for AdobeStock */}
+                      {/* Category/Categories with copy button for AdobeStock and Shutterstock */}
                       {isAdobeStock && image.result?.categories && (
                         <div>
-                          <h4 className="text-amber-500">Category:</h4>
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-amber-500">Category:</h4>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-6 w-6 p-0"
+                              onClick={() => handleCopyToClipboard((image.result?.categories || []).join(', '), `${image.id}-categories`)}
+                              aria-label="Copy Category"
+                            >
+                              {copiedId === `${image.id}-categories` ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}
+                            </Button>
+                          </div>
                           <div className="flex flex-wrap gap-2 mt-2">
                             {image.result.categories.map((category, index) => (
                               <span 
@@ -285,11 +331,20 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                           </div>
                         </div>
                       )}
-
-                      {/* Show categories for Shutterstock */}
                       {isShutterstock && image.result?.categories && (
                         <div>
-                          <h4 className="text-amber-500">Categories:</h4>
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-amber-500">Categories:</h4>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-6 w-6 p-0"
+                              onClick={() => handleCopyToClipboard((image.result?.categories || []).join(', '), `${image.id}-categories`)}
+                              aria-label="Copy Categories"
+                            >
+                              {copiedId === `${image.id}-categories` ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}
+                            </Button>
+                          </div>
                           <div className="flex flex-wrap gap-2 mt-2">
                             {image.result.categories.map((category, index) => (
                               <span 
@@ -303,13 +358,13 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                         </div>
                       )}
 
+                      {/* Freepik only fields (Prompt, Base-Model) remain unchanged */}
                       {isFreepikOnly && (
                         <>
                           <div>
                             <h4 className="text-amber-500">Prompt:</h4>
                             <p className="text-white">{image.result?.prompt || 'Not provided'}</p>
                           </div>
-                          
                           <div>
                             <h4 className="text-amber-500">Base-Model:</h4>
                             <p className="text-white">{image.result?.baseModel || 'Not provided'}</p>
