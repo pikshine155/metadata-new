@@ -72,7 +72,7 @@ const PricingPage: React.FC = () => {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button size="lg" className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white" onClick={() => window.open('https://csvpikshine.paymently.io/default/paymentlink/pay/SIBUfRkJxIDgK7GhkrL4WdAJofkOdkL8hnidHQdF', '_blank')}>
+                <Button size="lg" className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white" onClick={() => window.open('https://pikshine.paymently.io/default/paymentlink/pay/1auc4dUj3548yda6Y5lG4WODFaR5CtAmZCZCGbCl', '_blank')}>
                   Upgrade to Premium
                 </Button>
               </CardFooter>
@@ -104,7 +104,7 @@ const PricingPage: React.FC = () => {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button size="lg" className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white" onClick={() => window.open('https://csvpikshine.paymently.io/default/paymentlink/pay/oj1MGLV0cgkc5yHv034GDR2WzhcT8JT2ojM71s18', '_blank')}>
+                <Button size="lg" className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white" onClick={() => window.open('https://pikshine.paymently.io/default/paymentlink/pay/Xs7rxT3Kg6sBrflz0WRjC9vOZ9cxXWPg6SQFL0Zs', '_blank')}>
                   Upgrade to Basic
                 </Button>
               </CardFooter>
